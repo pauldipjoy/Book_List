@@ -27,7 +27,7 @@ this.isbn = isbn;
 
     }
 
-  addToBookList(book){
+  add__ToBook__List(book){
 
     //console.log(book);
 
@@ -55,7 +55,7 @@ list.appendChild(row);
 
   }
 
-// clar book in table-
+// clear books in table field -
   clear__add__book__fields(){
 
   document.querySelector('#title').value = '';
@@ -91,7 +91,7 @@ let book = new Book(title , author , isbn);
 
 let ui = new UI();
 
-ui.addToBookList(book);
+ui.add__ToBook__List(book);
 
 
 ui.clear__add__book__fields();
