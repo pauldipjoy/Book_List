@@ -1,6 +1,7 @@
 
 // Get the UI element-
 let form = document.querySelector('#book-form');
+let bookList = document.querySelector('#book-list');
 
 
 
@@ -20,18 +21,17 @@ this.isbn = isbn;
 // UI class-
 class UI {
 
-    constructor(){
+    // constructor(){
 
+// ....................
 
-
-
-    }
+ // }
 
 
 // add book list start here //
 
 
-addToBookList(book){
+static addToBookList(book){
 
     //console.log(book);
 
@@ -66,7 +66,7 @@ list.appendChild(row);
 
 
 // clear books in table field -
-clearAddbookField(){
+ static  clearAddbookField(){
 
 document.querySelector('#title').value = '';
 document.querySelector('#author').value= '';
@@ -84,11 +84,12 @@ document.querySelector('#isbn').value = '';
 // Validation section start //
 
 
-showAlert(message , className){
+static showAlert(message , className){
 
     let div = document.createElement('div');
     div.className = `alert ${className}`;
     div.appendChild(document.createTextNode(message));
+    //console.log(div)
     let container = document.querySelector('.container');
     let form = document.querySelector('#book-form');
     container.insertBefore(div , form);
@@ -110,17 +111,58 @@ showAlert(message , className){
 
 
 
+
+// REMOVE BOOK //
+
+static deleteFromBook(target){
+
+    //console.log(target);
+
+    if(target.hasAttribute('href')) {
+
+
+        target.parentElement.parentElement.remove();
+
+        UI.showAlert("Book remove!" , "success")
+    }
+
+
+}
+
+// REMOVE BOOK ENDS //
+
+
+
+
+
+
 } 
 
 
 
 
-// ADD event Listener-
+// ADD event Listener for form //
+
 form.addEventListener('submit' ,  newBook);
 
+// ADD event Listener for form ends //
 
 
-// Define function-
+// ADD event Listener for remove booklist//
+
+bookList.addEventListener('click' , removeBook)
+
+// ADD event Listener for remove booklist ends//
+
+
+
+
+
+
+
+
+// Define function  for form //
+
 function newBook(e) {
 
 //console.log("hello book");
@@ -131,7 +173,7 @@ author = document.querySelector('#author').value,
 isbn = document.querySelector('#isbn').value;
 
 
-let ui = new UI();
+// let ui = new UI();
 
 
 // validation check-
@@ -139,7 +181,7 @@ if(title === '' || author === '' || isbn === ''){
 
     // alert("All Fields")
 
-    ui.showAlert("Please fill all the fields!" , "error");  // ui function two parameter
+    UI.showAlert("Please fill all the fields?" , "error");  // ui function two parameter
 
 }
 
@@ -150,28 +192,16 @@ else {
     
     // let ui = new UI();
     
-    ui.addToBookList(book);
+    UI.addToBookList(book);
     
     
-    ui.clearAddbookField();
+    UI.clearAddbookField();
 
-    ui.showAlert("Book added" , "success"); 
+    UI.showAlert("Book added!" , "success"); 
     
     
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // create new book from Book class object-
 // let book = new Book(title , author , isbn);
@@ -191,4 +221,37 @@ e.preventDefault();
 
 
 }
+
+// Define function  for form  ends here//
+
+
+
+
+
+
+
+// Define function  for remove book list //
+
+function removeBook(e){
+
+    // let ui = new UI();
+    UI.deleteFromBook(e.target);
+    // UI.showAlert("Book remove!" , "success")
+
+e.preventDefault();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
