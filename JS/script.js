@@ -1,6 +1,7 @@
 
 // Get the UI element-
 let form = document.querySelector('#book-form');
+
 let bookList = document.querySelector('#book-list');
 
 
@@ -28,10 +29,13 @@ class UI {
  // }
 
 
+
+
+
+
 // add book list start here //
 
-
-static addToBookList(book){
+static addToBookList(book) {
 
     //console.log(book);
 
@@ -43,10 +47,10 @@ static addToBookList(book){
 
     row.innerHTML = 
     
-    `<td> ${book.title} </td>
+    ` <td> ${book.title} </td>
     <td> ${book.author} </td>
     <td> ${book.isbn} </td>
-    <td> <a href ="#" class = "delete"> X </a> </td>`
+    <td> <a href ="#" class = "delete"> X </a> </td> `
 
 
 
@@ -65,7 +69,16 @@ list.appendChild(row);
 
 
 
+
+
+
+
+
+
+
+
 // clear books in table field -
+
  static  clearAddbookField(){
 
 document.querySelector('#title').value = '';
@@ -73,7 +86,6 @@ document.querySelector('#author').value= '';
 document.querySelector('#isbn').value = '';
 
 }
-
 // clear books in table field  ends //
 
 
@@ -81,8 +93,12 @@ document.querySelector('#isbn').value = '';
 
 
 
-// Validation section start //
 
+
+
+
+
+// Validation section start //
 
 static showAlert(message , className){
 
@@ -97,17 +113,19 @@ static showAlert(message , className){
 
     setTimeout(function(){
 
-        document.querySelector('.alert').remove();
+    document.querySelector('.alert').remove();
 
-    } , 2000);
-
-
-
-
+    } , 2000 );
 
 }
 
 // Validation section End //
+
+
+
+
+
+
 
 
 
@@ -122,8 +140,12 @@ static deleteFromBook(target){
 
 
         target.parentElement.parentElement.remove();
+        //console.log(target.parentElement.previousElementSibling.textContent.trim());
 
-        UI.showAlert("Book remove!" , "success")
+    Store.removeBook(target.parentElement.previousElementSibling.textContent.trim());
+
+    UI.showAlert("Book remove!" , "success");
+
     }
 
 
@@ -132,11 +154,104 @@ static deleteFromBook(target){
 // REMOVE BOOK ENDS //
 
 
-
-
-
-
 } 
+
+
+
+
+
+// local Storage Class //
+class Store {
+
+   // function declare-
+    static getBooks(){
+
+        let books;
+
+        if(localStorage.getItem('books') === null){
+
+            books = []; // assign empty array
+        }
+        else {
+
+            books = JSON.parse(localStorage.getItem('books')); // js object
+        }
+
+        return books;
+    }
+
+
+
+static addBook(book){
+
+    let books = Store.getBooks();
+
+    books.push(book);
+
+    localStorage.setItem('books' , JSON.stringify(books));
+
+}
+
+
+
+static displayBooks() {
+
+    let books = Store.getBooks();
+
+    books.forEach(book => {
+
+        UI.addToBookList(book);
+
+
+    });
+}
+
+
+
+static removeBook(isbn){
+
+    let books = Store.getBooks();
+
+    books.forEach((book , index) => {
+
+     if(book.isbn === isbn){
+
+        books.splice(index, 1);
+     }
+
+ });
+
+ localStorage.setItem('books' , JSON.stringify(books));
+
+
+    
+}
+
+
+
+
+}
+
+// local Storage Class ends //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -153,6 +268,13 @@ form.addEventListener('submit' ,  newBook);
 bookList.addEventListener('click' , removeBook)
 
 // ADD event Listener for remove booklist ends//
+
+
+// local storage DOM Loaded event listener//
+
+document.addEventListener('DOMContentLoaded' , Store.displayBooks());
+
+// local storage DOM Loaded event listener end//
 
 
 
@@ -198,6 +320,9 @@ else {
     UI.clearAddbookField();
 
     UI.showAlert("Book added!" , "success"); 
+
+
+    Store.addBook(book);
     
     
 
